@@ -8,6 +8,12 @@ Primary workflow:
 - Use raw `adb` from the client/workstation for automation.
 - Use noVNC only as a fallback when the full emulator GUI/panel is needed.
 
+![img1](img1.png)
+![img2](img2.png)
+
+## Release
+![Latest release v45](android-podman-lab-web-manager-spawn-v45.tar.gz)
+
 ## Install or update
 
 ```bash
