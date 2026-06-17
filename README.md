@@ -67,4 +67,4 @@ adb -s SERVER_INTERNAL_IP:13555 shell getprop ro.product.model
 
 ## Documentation
 
-The `docs/` directory contains help files only: ADB, scrcpy, Frida, noVNC, lifecycle, service, API/device selection, cleanup, and maintenance commands.
+The `docs/` directory contains help file: ADB, scrcpy, Frida, noVNC, lifecycle, service, API/device selection, cleanup, and maintenance commands.
