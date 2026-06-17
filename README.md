@@ -1,6 +1,6 @@
 # Intro
 `Spawn, manage, and instrument Android emulators in Podman.`
-- designed for Rocky Linux, but easily adaptable for any distro
+- designed for Rocky Linux, but easily adaptable to any distro
 - can be spawned on the server as a remote instance
 - supports emulator GUI with noVNC via HTML, scrcpy
 - uses Podman and systemctl --user for emulator control
