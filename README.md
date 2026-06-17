@@ -2,6 +2,13 @@
 
 Podman-based Android emulator lab manager.
 
+- designed for Rocky Linux, but easily adaptable to any distro
+- can be spawned on the server as a remote instance
+- supports emulator GUI with noVNC via HTML, scrcpy
+- uses Podman and systemctl --user for emulator control
+- still in progress, but it works
+- adb over TCP
+
 Primary workflow:
 
 - Use `scrcpy` for fast screen/control from the client.
