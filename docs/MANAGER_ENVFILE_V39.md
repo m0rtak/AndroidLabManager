@@ -1,9 +1,5 @@
 # Manager environment file in base install v39
 
-Version: 0.39.0  
-Created: Petr Krivan  
-Project: android lab manager
-
 v39 makes `config/manager.env` part of the base install path as well as the web/service install path.
 
 Before v39:

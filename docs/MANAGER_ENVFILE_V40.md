@@ -1,9 +1,5 @@
 # Manager environment file early install v40
 
-Version: 0.40.0  
-Created: Petr Krivan  
-Project: android lab manager
-
 v40 moves `config/manager.env` creation to the start of the install flow.
 
 Why: v39 created `manager.env` near the end of `androidlab.sh install`, after image build/default emulator creation. If that long step failed or exited early, the environment file was still missing.

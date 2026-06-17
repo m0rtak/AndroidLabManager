@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Version: 0.42.0
+# Version: 0.44.0
 # Created: Petr Krivan
 # Project: android lab manager
 set -euo pipefail

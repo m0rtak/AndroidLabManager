@@ -1,9 +1,5 @@
 # Manager EnvironmentFile hardening v37
 
-Version: 0.37.0  
-Created: Petr Krivan  
-Project: android lab manager
-
 v37 fixes a startup failure where `androidlab-manager.service` could fail before launching the manager when systemd could not load `config/manager.env`.
 
 The generated user unit now includes:

@@ -1,9 +1,5 @@
 # Manager environment file creation v38
 
-Version: 0.38.0  
-Created: Petr Krivan  
-Project: android lab manager
-
 v38 fixes missing `config/manager.env` after installation or service repair.
 
 Changes:

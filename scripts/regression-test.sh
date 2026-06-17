@@ -547,7 +547,7 @@ grep -q 'input keyevent' androidlab.sh || { echo 'CLI key command does not use a
 
 say 'v42 split asset/header checks present'
 for f in manager/app.py manager/definitions.py manager/templates/base.html manager/templates/job.html manager/templates/novnc.html manager/static/app.css manager/static/app.js scripts/install-manager-service.sh scripts/run-manager.sh scripts/ensure-manager-env.sh androidlab.sh web-install.sh scripts/init-vars.sh client-rocky-scrcpy/client-init-vars.sh client-rocky-scrcpy/install-client.sh client-rocky-scrcpy/run-scrcpy.sh; do
-  grep -q 'Version: 0.42.0' "$f" || { echo "missing version header in $f" >&2; fail=1; }
+  grep -q 'Version: 0.44.0' "$f" || { echo "missing version header in $f" >&2; fail=1; }
   grep -q 'Created: Petr Krivan' "$f" || { echo "missing creator header in $f" >&2; fail=1; }
   grep -q 'Project: android lab manager' "$f" || { echo "missing project header in $f" >&2; fail=1; }
 done
@@ -569,6 +569,31 @@ grep -q 'scripts/init-vars.sh' web-install.sh || { echo 'web-install.sh does not
 grep -q 'init-vars.sh' scripts/spawn-emulator.sh || { echo 'spawn-emulator.sh does not source init-vars' >&2; fail=1; }
 grep -q 'client-init-vars.sh' client-rocky-scrcpy/install-client.sh || { echo 'client install does not source client-init-vars' >&2; fail=1; }
 grep -q 'ANDROIDLAB_SCRCPY_IMAGE' client-rocky-scrcpy/client-init-vars.sh || { echo 'missing centralized client image default' >&2; fail=1; }
+
+
+say 'v43 raw client ADB documentation checks present'
+for f in docs/ADB_CHEATSHEET.md docs/FRIDA_CHEATSHEET.md client-rocky-scrcpy/docs/ADB_COOKBOOK.md client-rocky-scrcpy/README.md; do
+  if grep -q 'androidlab-adb\|androidlab-settings\|androidlab-quicksettings\|androidlab-notifications' "$f"; then
+    echo "ADB docs still reference Android Lab ADB/settings wrappers in $f" >&2
+    fail=1
+  fi
+done
+grep -q 'adb connect SERVER_INTERNAL_IP:13555' docs/ADB_CHEATSHEET.md || { echo 'ADB cheat sheet lacks raw client adb connect example' >&2; fail=1; }
+grep -q 'adb -s SERVER_INTERNAL_IP:13555' docs/ADB_CHEATSHEET.md || { echo 'ADB cheat sheet lacks adb -s serial examples' >&2; fail=1; }
+grep -q 'ANDROID_SERIAL=SERVER_INTERNAL_IP:13555' docs/ADB_CHEATSHEET.md || { echo 'ADB cheat sheet lacks ANDROID_SERIAL example' >&2; fail=1; }
+grep -q 'localhost:5555 offline' docs/ADB_CHEATSHEET.md || { echo 'ADB cheat sheet lacks stale localhost offline cleanup note' >&2; fail=1; }
+grep -q 'emulator runs on the server' docs/RAW_ADB_CLIENT_V43.md || { echo 'raw ADB doc does not explain server/client boundary' >&2; fail=1; }
+
+say 'v44 documentation metadata header cleanup checks present'
+if grep -RIn '^Version: .*\|^Created: Petr Krivan\|^Project: android lab manager' docs/*.md client-rocky-scrcpy/docs/*.md README.md client-rocky-scrcpy/README.md; then
+  echo 'documentation metadata headers still present' >&2
+  fail=1
+fi
+if grep -RIn '<!--[[:space:]]*$' docs/*.md client-rocky-scrcpy/docs/*.md README.md client-rocky-scrcpy/README.md | grep -q .; then
+  echo 'documentation HTML comment header marker still present' >&2
+  fail=1
+fi
+[[ -f docs/DOC_HEADERS_V44.md ]] || { echo 'missing v44 doc header cleanup note' >&2; fail=1; }
 
 say 'idempotent install helper present'
 grep -q 'record_exists()' androidlab.sh || { echo 'missing record_exists helper' >&2; fail=1; }

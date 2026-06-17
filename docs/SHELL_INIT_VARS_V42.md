@@ -1,9 +1,5 @@
 # Shell init variable split v42
 
-Version: 0.42.0  
-Created: Petr Krivan  
-Project: android lab manager
-
 v42 centralizes shell-side default variables that were previously repeated across multiple scripts.
 
 Server-side defaults now live in:

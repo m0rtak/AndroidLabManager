@@ -1,9 +1,5 @@
 # Asset Split v36
 
-Version: 0.36.0  
-Created: Petr Krivan  
-Project: android lab manager
-
 v36 splits the manager UI shell into separate maintainable files:
 
 - `manager/templates/base.html` contains the shared HTML page shell.
@@ -13,10 +9,4 @@ v36 splits the manager UI shell into separate maintainable files:
 - `manager/static/app.js` contains copy fallback, navigation, filtering, async job polling, and noVNC keyevent helpers.
 - `manager/definitions.py` contains API presets, noVNC size profiles, and device profile presets.
 
-Each new split file includes this header block:
-
-```text
-Version: 0.36.0
-Created: Petr Krivan
-Project: android lab manager
-```
+The split source files keep the requested source-file metadata headers; Markdown documentation no longer carries those headers as of v44.

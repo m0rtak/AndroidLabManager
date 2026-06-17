@@ -1,3 +1,15 @@
+# Android Podman Lab Web Manager v44
+
+This release removes version/creator/project metadata headers from Markdown documentation. Source files still keep their requested headers.
+
+# Android Podman Lab Web Manager v43
+
+This release updates ADB documentation to use raw `adb` from the client/workstation. The emulator runs on the Podman server, and the client connects directly to the exposed endpoint, for example `adb connect SERVER_INTERNAL_IP:13555`.
+
+# Android Podman Lab Web Manager v42
+
+This release centralizes shell-side default/init variables in `scripts/init-vars.sh` and client defaults in `client-rocky-scrcpy/client-init-vars.sh`.
+
 # Android Podman Lab Web Manager v35
 
 This release adds a controlled noVNC wrapper with Back/Home/Recents phone controls using ADB keyevents.

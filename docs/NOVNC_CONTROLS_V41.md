@@ -1,9 +1,5 @@
 # noVNC controls 500 fix v41
 
-Version: 0.41.0  
-Created: Petr Krivan  
-Project: android lab manager
-
 v41 fixes Internal Server Error cases when opening the controlled noVNC wrapper from an instance card.
 
 Root causes:
