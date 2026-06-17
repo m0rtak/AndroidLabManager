@@ -1,14 +1,53 @@
-# Android Podman Lab Web Manager v44
+# Intro
+`Spawn, manage, and instrument Android emulators in Podman.`
+- designed for Rocky Linux, but easily adaptable for any distro
+- can be spawned on the server as a remote instance
+- supports emulator GUI with noVNC via HTML, scrcpy
+- uses Podman and systemctl --user for emulator control
+- adb over TCP
+  
+```bash
+adb connect server:port
+adb devices -l
+```
+- see DOCS via web for full info
 
-This release removes version/creator/project metadata headers from Markdown documentation. Source files still keep their requested headers.
+![img1](img1.png)
+![img2](img2.png)
 
-# Android Podman Lab Web Manager v43
+## Install/update
 
-This release updates ADB documentation to use raw `adb` from the client/workstation. The emulator runs on the Podman server, and the client connects directly to the exposed endpoint, for example `adb connect SERVER_INTERNAL_IP:13555`.
+When used as archive:
 
-# Android Podman Lab Web Manager v42
+```bash
+mkdir -p "$HOME/AndroidLab"
+tar -xzf android-podman-lab-web-manager-spawn-v23.tar.gz -C "$HOME/AndroidLab"
+cd "$HOME/AndroidLab/android-podman-lab-web-manager-spawn-v23"
+```
 
-This release centralizes shell-side default/init variables in `scripts/init-vars.sh` and client defaults in `client-rocky-scrcpy/client-init-vars.sh`.
+Installation:
+
+```bash
+./web-install.sh \
+  --api 33 \
+  --target google_apis \
+  --host 0.0.0.0 \
+  --port 18080 \
+  --public-host SERVER_INTERNAL_IP \
+  --token 'change-me'
+```
+
+After installation:
+
+```bash
+cd "$HOME/AndroidLab/android-podman-lab"
+
+scripts/clean-stale-files.sh
+./androidlab.sh discover-running
+./androidlab.sh repair-records
+scripts/regression-test.sh
+systemctl --user restart androidlab-manager.service
+```
 
 # Android Podman Lab Web Manager v35
 
@@ -38,31 +77,7 @@ v23 fixes the web UI layer:
 - Copy command uses visible textareas and HTTP-safe fallbacks.
 - Generated scrcpy commands use `--bit-rate`.
 - Regression tests render the actual manager HTML and test the previous `server:33/vnc.html` failure.
-
-## Install/update
-
-```bash
-mkdir -p "$HOME/AndroidLab"
-tar -xzf android-podman-lab-web-manager-spawn-v23.tar.gz -C "$HOME/AndroidLab"
-cd "$HOME/AndroidLab/android-podman-lab-web-manager-spawn-v23"
-
-./web-install.sh \
-  --api 33 \
-  --target google_apis \
-  --host 0.0.0.0 \
-  --port 18080 \
-  --public-host SERVER_INTERNAL_IP \
-  --token 'change-me'
-```
-
-After update:
-
-```bash
-cd "$HOME/AndroidLab/android-podman-lab"
-./androidlab.sh repair-records
-scripts/regression-test.sh
-```
-
+  
 ## v23 visual polish
 
 v23 adds a dark professional web-manager theme. It keeps the Full HD noVNC profile and all v17 safety hardening.
