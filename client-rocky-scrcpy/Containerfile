@@ -1,0 +1,10 @@
+FROM docker.io/library/ubuntu:24.04
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates adb scrcpy \
+    libsdl2-2.0-0 libgl1 libegl1 libgles2 libglvnd0 \
+    libpulse0 libasound2t64 libusb-1.0-0 mesa-utils \
+    && rm -rf /var/lib/apt/lists/*
+COPY run-scrcpy.sh /usr/local/bin/run-scrcpy
+RUN chmod +x /usr/local/bin/run-scrcpy
+ENTRYPOINT ["/usr/local/bin/run-scrcpy"]

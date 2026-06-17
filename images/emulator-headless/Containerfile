@@ -1,0 +1,45 @@
+FROM docker.io/library/ubuntu:24.04
+
+ARG ANDROID_HOME=/opt/android-sdk
+ARG CMDLINE_TOOLS_URL=https://dl.google.com/android/repository/commandlinetools-linux-14742923_latest.zip
+ARG ANDROID_API=33
+ARG ANDROID_TARGET=google_apis
+ARG ANDROID_ARCH=x86_64
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV ANDROID_HOME=${ANDROID_HOME}
+ENV ANDROID_SDK_ROOT=${ANDROID_HOME}
+ENV ANDROID_API=${ANDROID_API}
+ENV ANDROID_TARGET=${ANDROID_TARGET}
+ENV ANDROID_ARCH=${ANDROID_ARCH}
+ENV PATH=${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/emulator:${PATH}
+ENV GPU_MODE=swiftshader
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates curl unzip git \
+    openjdk-17-jre-headless \
+    socat iproute2 procps net-tools \
+    libnss3 libxcomposite1 libxcursor1 libxi6 libxtst6 libxrandr2 \
+    libasound2t64 libpulse0 libatk1.0-0 libatk-bridge2.0-0 libcups2 \
+    libdbus-1-3 libxdamage1 libxkbcommon0 libgbm1 libgtk-3-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p ${ANDROID_HOME}/cmdline-tools \
+    && curl -fsSL "${CMDLINE_TOOLS_URL}" -o /tmp/cmdline-tools.zip \
+    && unzip -q /tmp/cmdline-tools.zip -d /tmp/android-cli \
+    && mkdir -p ${ANDROID_HOME}/cmdline-tools/latest \
+    && mv /tmp/android-cli/cmdline-tools/* ${ANDROID_HOME}/cmdline-tools/latest/ \
+    && rm -rf /tmp/android-cli /tmp/cmdline-tools.zip
+
+RUN yes | sdkmanager --licenses >/dev/null || true \
+    && sdkmanager \
+      "platform-tools" \
+      "emulator" \
+      "platforms;android-${ANDROID_API}" \
+      "system-images;android-${ANDROID_API};${ANDROID_TARGET};${ANDROID_ARCH}"
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+EXPOSE 5554 5555
+ENTRYPOINT ["/entrypoint.sh"]

@@ -1,0 +1,12 @@
+<!--
+Version: 0.42.0
+Created: Petr Krivan
+Project: android lab manager
+-->
+<div class="card full" data-job-page="true" data-job-id="{{ job_id|e }}" data-job-url="/job_status/{{ job_id|e }}">
+  <div class="section-title"><h2>{{ title|e }}</h2><span class="pill">background job</span></div>
+  <p class="small">This job runs outside the web request, so large image builds will not block the manager UI or hit browser/server timeouts.</p>
+  <div class="toolbar"><a class="button-link" href="/?view=spawn#spawn">Back to Spawn</a><a class="button-link" href="/?view=profiles#profiles">Back to Profiles</a><a class="button-link" href="/?view=instances#instances">Back to Instances</a></div>
+  <div>Status: <b id="job-status">queued</b></div>
+  <pre id="job-log" style="min-height:22rem;white-space:pre-wrap">Loading...</pre>
+</div>

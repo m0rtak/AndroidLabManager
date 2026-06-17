@@ -1,0 +1,40 @@
+<!--
+Version: 0.42.0
+Created: Petr Krivan
+Project: android lab manager
+-->
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Android Lab Manager</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+  <script defer src="{{ url_for('static', filename='app.js') }}"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="logo"></div><div><div class="brand-title">Android Lab</div><div class="brand-sub">Podman emulator manager</div></div></div>
+      <nav class="side-nav">
+        <a data-nav-section="overview" href="/?view=overview#overview" onclick="return navSection('overview')">Dashboard <span>⌂</span></a>
+        <a data-nav-section="spawn" href="/?view=spawn#spawn" onclick="return navSection('spawn')">Spawn <span>＋</span></a>
+        <a data-nav-section="profiles" href="/?view=profiles#profiles" onclick="return navSection('profiles')">Profiles <span>▣</span></a>
+        <a data-nav-section="instances" href="/?view=instances#instances" onclick="return navSection('instances')">Instances <span>▦</span></a>
+        <a data-nav-section="frida" href="/?view=frida#frida" onclick="return navSection('frida')">Frida <span>⚙</span></a>
+        <a href="/docs">Docs <span>↗</span></a>
+      </nav>
+      <div class="side-note">Primary workflow: use <b>scrcpy</b> for speed, <b>ADB</b> for automation, and <b>noVNC</b> only when you need the emulator GUI panel.</div>
+    </aside>
+    <main class="content"><div class="shell">
+      <section class="hero">
+        <h1>Android Lab Manager</h1>
+        <p><b>Spawn, manage, and instrument Android emulators in Podman.</b></p>
+        <p>ADB/scrcpy is the primary fast path. noVNC is available as a GUI fallback and still exposes ADB, so scrcpy can connect to noVNC instances too.</p>
+        <div class="nav"><a href="/">Refresh</a><a href="/docs">Docs</a><span class="pill">noVNC restart keeps AVD data</span></div>
+      </section>
+      {{ msg_html|safe }}
+      {{ body|safe }}
+    </div></main>
+  </div>
+</body>
+</html>

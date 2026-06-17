@@ -1,0 +1,19 @@
+<!--
+Version: 0.42.0
+Created: Petr Krivan
+Project: android lab manager
+-->
+<div class="card full" data-novnc-session="true" data-instance-name="{{ name|e }}" data-csrf="{{ csrf_token|e }}">
+  <div class="section-title"><h2>noVNC session: {{ name|e }}</h2><span class="pill">phone controls</span></div>
+  <p class="small">Use these buttons to send Android keyevents through ADB. They replace the emulator triangle/circle/square controls when the emulator toolbar is missing or inconvenient in noVNC.</p>
+  <div class="phone-controls">
+    <button type="button" onclick="sendKey('back')">◀ Back</button>
+    <button type="button" class="circle" onclick="sendKey('home')">● Home</button>
+    <button type="button" onclick="sendKey('recents')">■ Recents</button>
+    <button type="button" onclick="sendKey('menu')">☰ Menu</button>
+    <button type="button" onclick="sendKey('power')">Power</button>
+    <span id="key-status" class="small"></span>
+  </div>
+  <div class="novnc-frame-wrap"><iframe class="novnc-frame" src="{{ src|safe }}" allow="clipboard-read; clipboard-write"></iframe></div>
+  <p class="small"><a href="/?view=instances#instances">Back to Instances</a> · <a target="_blank" href="{{ src|safe }}">Open direct noVNC</a></p>
+</div>
