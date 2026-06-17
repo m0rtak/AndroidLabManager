@@ -18,15 +18,18 @@ adb devices -l
 
 ## Install/update
 
+### Release
+![Latest package release v44](android-podman-lab-web-manager-spawn-v44.tar.gz)
+
 When used as archive:
 
 ```bash
 mkdir -p "$HOME/AndroidLab"
-tar -xzf android-podman-lab-web-manager-spawn-v23.tar.gz -C "$HOME/AndroidLab"
-cd "$HOME/AndroidLab/android-podman-lab-web-manager-spawn-v23"
+tar -xzf android-podman-lab-web-manager-spawn-v44.tar.gz -C "$HOME/AndroidLab"
+cd "$HOME/AndroidLab/android-podman-lab-web-manager-spawn-v44"
 ```
 
-Installation:
+### Installation (from git):
 
 ```bash
 ./web-install.sh \
@@ -38,7 +41,7 @@ Installation:
   --token 'change-me'
 ```
 
-After installation:
+#### After installation:
 
 ```bash
 cd "$HOME/AndroidLab/android-podman-lab"
