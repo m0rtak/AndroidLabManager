@@ -221,7 +221,7 @@ grep -q 'if code != 0' manager/app.py || { echo 'resize does not stop on disable
 
 say 'v23 dark theme checks present'
 grep -q 'color-scheme: dark' manager/static/app.css || { echo 'missing dark color scheme' >&2; fail=1; }
-grep -q 'DARK_THEME_V18' docs/DARK_THEME_V18.md || true
+[[ ! -f docs/DARK_THEME_V18.md ]] || grep -q 'DARK_THEME_V18' docs/DARK_THEME_V18.md || true
 grep -q 'radial-gradient' manager/static/app.css || { echo 'missing dark visual background' >&2; fail=1; }
 grep -q 'linear-gradient(180deg,#0ea5e9,#0284c7)' manager/static/app.css || { echo 'missing professional button gradient' >&2; fail=1; }
 
@@ -471,7 +471,7 @@ grep -q "id='view-instances'" manager/app.py || { echo 'missing Instances view' 
 grep -q "class='readable-table'" manager/app.py || { echo 'missing readable table' >&2; fail=1; }
 grep -q 'tr.instance-row,.instance-card' manager/static/app.js || { echo 'instance filter does not handle cards and table rows' >&2; fail=1; }
 if grep -q 'Client scrcpy command</th>' manager/app.py; then echo 'long scrcpy command column still in table' >&2; fail=1; fi
-[[ -f docs/UI_ORGANIZATION_V30.md ]] || { echo 'missing UI organization doc' >&2; fail=1; }
+[[ -f docs/WEB_MANAGER.md ]] || { echo 'missing web manager help doc' >&2; fail=1; }
 
 
 
@@ -547,7 +547,7 @@ grep -q 'input keyevent' androidlab.sh || { echo 'CLI key command does not use a
 
 say 'v42 split asset/header checks present'
 for f in manager/app.py manager/definitions.py manager/templates/base.html manager/templates/job.html manager/templates/novnc.html manager/static/app.css manager/static/app.js scripts/install-manager-service.sh scripts/run-manager.sh scripts/ensure-manager-env.sh androidlab.sh web-install.sh scripts/init-vars.sh client-rocky-scrcpy/client-init-vars.sh client-rocky-scrcpy/install-client.sh client-rocky-scrcpy/run-scrcpy.sh; do
-  grep -q 'Version: 0.44.0' "$f" || { echo "missing version header in $f" >&2; fail=1; }
+  grep -q 'Version: 0.45.0' "$f" || { echo "missing version header in $f" >&2; fail=1; }
   grep -q 'Created: Petr Krivan' "$f" || { echo "missing creator header in $f" >&2; fail=1; }
   grep -q 'Project: android lab manager' "$f" || { echo "missing project header in $f" >&2; fail=1; }
 done
@@ -582,7 +582,7 @@ grep -q 'adb connect SERVER_INTERNAL_IP:13555' docs/ADB_CHEATSHEET.md || { echo 
 grep -q 'adb -s SERVER_INTERNAL_IP:13555' docs/ADB_CHEATSHEET.md || { echo 'ADB cheat sheet lacks adb -s serial examples' >&2; fail=1; }
 grep -q 'ANDROID_SERIAL=SERVER_INTERNAL_IP:13555' docs/ADB_CHEATSHEET.md || { echo 'ADB cheat sheet lacks ANDROID_SERIAL example' >&2; fail=1; }
 grep -q 'localhost:5555 offline' docs/ADB_CHEATSHEET.md || { echo 'ADB cheat sheet lacks stale localhost offline cleanup note' >&2; fail=1; }
-grep -q 'emulator runs on the server' docs/RAW_ADB_CLIENT_V43.md || { echo 'raw ADB doc does not explain server/client boundary' >&2; fail=1; }
+grep -q 'emulator runs on the server\|The emulator runs on the server' docs/ADB_CHEATSHEET.md || { echo 'ADB cheat sheet does not explain server/client boundary' >&2; fail=1; }
 
 say 'v44 documentation metadata header cleanup checks present'
 if grep -RIn '^Version: .*\|^Created: Petr Krivan\|^Project: android lab manager' docs/*.md client-rocky-scrcpy/docs/*.md README.md client-rocky-scrcpy/README.md; then
@@ -593,7 +593,22 @@ if grep -RIn '<!--[[:space:]]*$' docs/*.md client-rocky-scrcpy/docs/*.md README.
   echo 'documentation HTML comment header marker still present' >&2
   fail=1
 fi
-[[ -f docs/DOC_HEADERS_V44.md ]] || { echo 'missing v44 doc header cleanup note' >&2; fail=1; }
+if find docs -maxdepth 1 -type f -name '*_V[0-9]*.md' | grep -q .; then echo 'version-specific docs still present' >&2; find docs -maxdepth 1 -type f -name '*_V[0-9]*.md' >&2; fail=1; fi
+
+
+say 'v45 help-only documentation set checks present'
+if find docs -maxdepth 1 -type f \( -name '*_V[0-9]*.md' -o -name '*V[0-9]*.md' -o -name 'CODE_REVIEW*.md' -o -name 'SOURCE_REVIEW*.md' -o -name 'REGRESSION_TESTS.md' -o -name 'RUNTIME_SIMULATION.md' -o -name 'DOC_HEADERS*.md' -o -name 'RAW_ADB_CLIENT_V*.md' -o -name 'SCRCPY_125.md' \) | grep -q .; then
+  echo 'non-help/version/internal documentation files still present' >&2
+  find docs -maxdepth 1 -type f \( -name '*_V[0-9]*.md' -o -name '*V[0-9]*.md' -o -name 'CODE_REVIEW*.md' -o -name 'SOURCE_REVIEW*.md' -o -name 'REGRESSION_TESTS.md' -o -name 'RUNTIME_SIMULATION.md' -o -name 'DOC_HEADERS*.md' -o -name 'RAW_ADB_CLIENT_V*.md' -o -name 'SCRCPY_125.md' \) >&2
+  fail=1
+fi
+for f in docs/ADB_CHEATSHEET.md docs/FRIDA_CHEATSHEET.md docs/NOVNC.md docs/SCRCPY_COMMANDS.md docs/SERVICE.md docs/SPAWN.md docs/CLEAN_WIPE.md docs/WEB_MANAGER.md; do
+  [[ -f "$f" ]] || { echo "missing help doc $f" >&2; fail=1; }
+done
+if grep -q '^# Android Podman Lab Web Manager v[0-9]' README.md; then
+  echo 'root README still contains release-history heading' >&2
+  fail=1
+fi
 
 say 'idempotent install helper present'
 grep -q 'record_exists()' androidlab.sh || { echo 'missing record_exists helper' >&2; fail=1; }

@@ -1,37 +1,20 @@
-# Intro
-`Spawn, manage, and instrument Android emulators in Podman.`
-- designed for Rocky Linux, but easily adaptable to any distro
-- can be spawned on the server as a remote instance
-- supports emulator GUI with noVNC via HTML, scrcpy
-- uses Podman and systemctl --user for emulator control
-- still in progress, but it works
-- adb over TCP
-  
-```bash
-adb connect server:port
-adb devices -l
-```
-- see DOCS via web for full info
+# Android Podman Lab Web Manager
 
-![img1](img1.png)
-![img2](img2.png)
+Podman-based Android emulator lab manager.
 
-## Install/update
+Primary workflow:
 
-### Release
-![Latest package release v44](android-podman-lab-web-manager-spawn-v44.tar.gz)
+- Use `scrcpy` for fast screen/control from the client.
+- Use raw `adb` from the client/workstation for automation.
+- Use noVNC only as a fallback when the full emulator GUI/panel is needed.
 
-When used as archive:
+## Install or update
 
 ```bash
 mkdir -p "$HOME/AndroidLab"
-tar -xzf android-podman-lab-web-manager-spawn-v44.tar.gz -C "$HOME/AndroidLab"
-cd "$HOME/AndroidLab/android-podman-lab-web-manager-spawn-v44"
-```
+tar -xzf android-podman-lab-web-manager-spawn.tar.gz -C "$HOME/AndroidLab"
+cd "$HOME/AndroidLab/android-podman-lab-web-manager-spawn"
 
-### Installation (from git):
-
-```bash
 ./web-install.sh \
   --api 33 \
   --target google_apis \
@@ -41,7 +24,7 @@ cd "$HOME/AndroidLab/android-podman-lab-web-manager-spawn-v44"
   --token 'change-me'
 ```
 
-#### After installation:
+After update:
 
 ```bash
 cd "$HOME/AndroidLab/android-podman-lab"
@@ -53,4 +36,35 @@ scripts/regression-test.sh
 systemctl --user restart androidlab-manager.service
 ```
 
-This version reorganizes the web manager into focused dashboard sections, keeps the table format for detailed review, removes long command text from the table, and shows Start/Stop plus scrcpy commands in readable instance cards.
+## Manager service
+
+```bash
+systemctl --user start androidlab-manager.service
+systemctl --user restart androidlab-manager.service
+systemctl --user status androidlab-manager.service
+journalctl --user -u androidlab-manager.service -f
+```
+
+## Emulator instances
+
+```bash
+./androidlab.sh spawn NAME headless 33 google_apis pixel
+./androidlab.sh spawn NAME novnc 33 google_apis pixel
+./androidlab.sh start NAME
+./androidlab.sh stop NAME
+./androidlab.sh state NAME
+```
+
+## Client ADB
+
+Run raw `adb` on the client/workstation and connect to the server-published ADB port from the manager instance card.
+
+```bash
+adb connect SERVER_INTERNAL_IP:13555
+adb devices -l
+adb -s SERVER_INTERNAL_IP:13555 shell getprop ro.product.model
+```
+
+## Documentation
+
+The `docs/` directory contains help files only: ADB, scrcpy, Frida, noVNC, lifecycle, service, API/device selection, cleanup, and maintenance commands.
